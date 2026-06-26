@@ -72,55 +72,6 @@ os.environ["HF_TOKEN"] = "hf_your_token_here"
 
 ---
 
-## Quick Start
-
-```python
-from huggingface_hub import InferenceClient
-from gtts import gTTS
-from IPython.display import Audio
-import io, os
-
-# 1. Set up the Hugging Face Inference client
-client = InferenceClient(
-    model="meta-llama/Llama-3.2-3B-Instruct",
-    token=os.environ["HF_TOKEN"],
-)
-
-# 2. Generate a story
-def generate_story(topic):
-    prompt = f"""Write an engaging and educational story about {topic} for beginners.
-Use simple and clear language to explain basic concepts.
-Include interesting facts and keep it friendly and encouraging.
-The story should be around 200-300 words and end with a brief summary of what we learned."""
-
-    response = client.chat_completion(
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=1000,
-    )
-    return response.choices[0].message.content
-
-topic = "the life cycle of butterflies"
-story = generate_story(topic)
-print("Generated Story:\n", story)
-
-# 3. Convert to speech and play
-tts = gTTS(story)
-audio_bytes = io.BytesIO()
-tts.write_to_fp(audio_bytes)
-audio_bytes.seek(0)
-Audio(audio_bytes.read(), autoplay=False)
-```
-
----
-
-## Saving the Audio (Optional)
-
-```python
-tts.save("generated_story.mp3")
-```
-
----
-
 ## Project Structure
 
 ```
